@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, abort
+from flask import Blueprint, jsonify, request
 
 class SQLA2api(object):
     def __init__(self, app=None, model=None, db=None):
@@ -38,20 +38,49 @@ class SQLA2api(object):
                 self._db.session.commit()
 
                 response = jsonify(params)
-                response.status_code = 201
-                return response
+                return response, 201
 
             else:
+                # GET
                 all_items = self._model.query.all()
                 results = []
                 for item in all_items:
                     entry = {}
                     for field in self._fields:
-                        entry[field] = str(getattr(item, field)) # item[field]
+                        entry[field] = getattr(item, field)
                     results.append(entry)
 
                 response = jsonify(results)
-                response.status_code = 200
-                return response
+                return response, 200
+
+        @self.blueprint.route(self._model_alias + '/<item_id>', methods=['GET', 'PUT', 'DELETE'])
+        def item_methods(item_id):
+            entry = self._model.query.get_or_404(item_id)
+
+            if request.method == 'GET':
+                result = {}
+                for field in self._fields:
+                    result[field] = getattr(entry, field)
+
+                response = jsonify(result)
+                return response, 200
+
+            elif request.method == 'PUT':
+                result = {}
+                for field in self._fields:
+                    value = request.form[field]
+                    setattr(entry, field, value)
+                    result[field] = value
+                self._db.session.commit()
+
+                response = jsonify(result)
+                return response, 201
+
+            else:
+                # DELETE
+                self._db.session.delete(entry)
+                self._db.session.commit()
+
+                return '', 204
 
         return self.blueprint
