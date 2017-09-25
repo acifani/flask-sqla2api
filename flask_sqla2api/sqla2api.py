@@ -30,7 +30,7 @@ class SQLA2api(object):
             if request.method == 'POST':
                 params = {}
                 for field in self._fields:
-                    params[field] = request.form[field]
+                    params[field] = request.form.get(field)
                 new_item = self._model(**params)
 
                 # TODO: add try/except
