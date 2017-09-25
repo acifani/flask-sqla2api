@@ -9,3 +9,4 @@ TODO:
 - Add documentation
 - Add various CI files (.travis.yml, tox.ini)
 - Add setup.py
+- Separate requirements for dev environments
