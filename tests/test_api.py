@@ -50,8 +50,7 @@ class ApiTests(unittest.TestCase):
         json_res = json.loads(res.data)
 
         self.assertEqual(201, res.status_code)
-        # TODO: fix following test fails because id returns as str instead of int
-        # self.assertEqual(GOOD_ENTRY, json_res)
+        self.assertEqual(GOOD_ENTRY, json_res)
 
     def test_put(self):
         self.client.post('/entry', data=GOOD_ENTRY)
@@ -61,8 +60,7 @@ class ApiTests(unittest.TestCase):
         json_res = json.loads(res.data)
 
         self.assertEqual(201, res.status_code)
-        # TODO: fix following test fails because id returns as str instead of int
-        # self.assertEqual(modified_entry, json_res)
+        self.assertEqual(modified_entry, json_res)
 
     def test_delete(self):
         self.client.post('/entry', data=GOOD_ENTRY)

@@ -15,7 +15,10 @@ class SQLA2api(object):
     def init_model(self, model):
         self._model = model
         self._model_alias = str(self._model.__table__)
-        self._fields = self._model.__table__.columns._data.keys()
+        self._fields = self._model.__table__.columns.keys()
+        self._fields_type = {}
+        for column in self._model.__table__.columns:
+            self._fields_type[column.name] = column.type.python_type
         self.blueprint = Blueprint(self._model_alias, __name__)
 
     def init_db(self, db):
@@ -30,7 +33,7 @@ class SQLA2api(object):
             if request.method == 'POST':
                 params = {}
                 for field in self._fields:
-                    params[field] = request.form.get(field)
+                    params[field] = self._cast(field, request.form.get(field))
                 new_item = self._model(**params)
 
                 # TODO: add try/except
@@ -68,7 +71,7 @@ class SQLA2api(object):
             elif request.method == 'PUT':
                 result = {}
                 for field in self._fields:
-                    value = request.form[field]
+                    value = self._cast(field, request.form[field])
                     setattr(entry, field, value)
                     result[field] = value
                 self._db.session.commit()
@@ -84,3 +87,8 @@ class SQLA2api(object):
                 return '', 204
 
         return self.blueprint
+
+    def _cast(self, field, value):
+        if not self._fields_type:
+            raise ValueError("Model not initialized")
+        return (self._fields_type[field])(value)
