@@ -8,6 +8,7 @@ Basic usage
 -------------
 
 .. code-block:: python
+
     from flask import Flask
     from flask_sqlalchemy import SQLAlchemy
     from flask_sqla2api import SQLA2api
