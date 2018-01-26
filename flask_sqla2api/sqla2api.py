@@ -31,62 +31,69 @@ class SQLA2api(object):
         @self.blueprint.route(self._model_alias, methods=['GET', 'POST'])
         def collection_methods():
             if request.method == 'POST':
-                params = {}
-                for field in self._fields:
-                    params[field] = self._cast(field, request.form.get(field))
-                new_item = self._model(**params)
-
-                # TODO: add try/except
-                self._db.session.add(new_item)
-                self._db.session.commit()
-
-                response = jsonify(params)
-                return response, 201
-
+                return self.post(request.form)
             else:
-                # GET
-                all_items = self._model.query.all()
-                results = []
-                for item in all_items:
-                    entry = {}
-                    for field in self._fields:
-                        entry[field] = getattr(item, field)
-                    results.append(entry)
-
-                response = jsonify(results)
-                return response, 200
+                return self.get_all()
 
         @self.blueprint.route(self._model_alias + '/<item_id>', methods=['GET', 'PUT', 'DELETE'])
-        def item_methods(item_id):
+        def resource_methods(item_id):
             entry = self._model.query.get_or_404(item_id)
-
             if request.method == 'GET':
-                result = {}
-                for field in self._fields:
-                    result[field] = getattr(entry, field)
-
-                response = jsonify(result)
-                return response, 200
-
+                return self.get(entry)
             elif request.method == 'PUT':
-                result = {}
-                for field in self._fields:
-                    value = self._cast(field, request.form[field])
-                    setattr(entry, field, value)
-                    result[field] = value
-                self._db.session.commit()
-
-                response = jsonify(result)
-                return response, 201
-
+                return self.put(request.form, entry)
             else:
-                # DELETE
-                self._db.session.delete(entry)
-                self._db.session.commit()
-
-                return '', 204
+                return self.delete(entry)
 
         return self.blueprint
+
+    def post(self, form):
+        params = {}
+        for field in self._fields:
+            params[field] = self._cast(field, form.get(field))
+        new_item = self._model(**params)
+        # TODO: add try/except
+        self._db.session.add(new_item)
+        self._db.session.commit()
+
+        response = jsonify(params)
+        return response, 201
+
+    def get_all(self):
+        all_items = self._model.query.all()
+        results = []
+        for item in all_items:
+            entry = {}
+            for field in self._fields:
+                entry[field] = getattr(item, field)
+            results.append(entry)
+
+        response = jsonify(results)
+        return response, 200
+
+    def get(self, entry):
+        result = {}
+        for field in self._fields:
+            result[field] = getattr(entry, field)
+
+        response = jsonify(result)
+        return response, 200
+
+    def put(self, form, entry):
+        result = {}
+        for field in self._fields:
+            value = self._cast(field, form[field])
+            setattr(entry, field, value)
+            result[field] = value
+        self._db.session.commit()
+
+        response = jsonify(result)
+        return response, 201
+
+    def delete(self, entry):
+        self._db.session.delete(entry)
+        self._db.session.commit()
+        return '', 204
 
     def _cast(self, field, value):
         if not self._fields_type:
