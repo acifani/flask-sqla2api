@@ -1,6 +1,10 @@
 Flask-sqla2api
 ==============
 
+.. image:: https://travis-ci.org/acifani/flask-sqla2api.svg?branch=master
+    :target: https://travis-ci.org/acifani/flask-sqla2api
+
+
 Flask middleware that creates a simple Flask API CRUD REST endpoint
 based on a SQLAlchemy model definition.
 
