@@ -19,7 +19,11 @@ class ApiTests(unittest.TestCase):
             id = self.db.Column(self.db.Integer, primary_key=True)
             name = self.db.Column(self.db.String(80))
 
-        api = SQLA2api([Entry], self.db)
+        class Person(self.db.Model):
+            id = self.db.Column(self.db.Integer, primary_key=True)
+            name = self.db.Column(self.db.String(80))
+
+        api = SQLA2api([Entry, Person], self.db)
         api.append_blueprints(app)
 
         self.db.create_all()
@@ -46,6 +50,10 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(200, res.status_code)
         self.assertEqual(GOOD_ENTRY, json_res)
 
+    def test_get_one_not_found(self):
+        res = self.client.get('/entry/2')
+        self.assertEqual(404, res.status_code)
+
     def test_post(self):
         res = self.client.post('/entry', data=GOOD_ENTRY)
         json_res = json.loads(res.data)
@@ -63,9 +71,17 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(201, res.status_code)
         self.assertEqual(modified_entry, json_res)
 
+    def test_put_not_found(self):
+        res = self.client.put('/entry/2', data=GOOD_ENTRY)
+        self.assertEqual(404, res.status_code)
+
     def test_delete(self):
         self.client.post('/entry', data=GOOD_ENTRY)
         res = self.client.delete('/entry/1')
 
         self.assertEqual(204, res.status_code)
         self.assertEqual(b'', res.data)
+
+    def test_delete_not_found(self):
+        res = self.client.delete('/entry/2')
+        self.assertEqual(404, res.status_code)
