@@ -22,3 +22,8 @@ class SQLA2api(object):
             raise ValueError("Cannot append to null app.")
         for model in self.models:
             app.register_blueprint(model.make_blueprint(), url_prefix='/')
+
+
+def generate_blueprint(model, db):
+    model = Model(model, db)
+    return model.make_blueprint()
