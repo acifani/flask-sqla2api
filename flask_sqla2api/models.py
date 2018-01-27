@@ -20,20 +20,21 @@ class Model(object):
         self.fields_type = {}
         for column in model.__table__.columns:
             self.fields_type[column.name] = column.type.python_type
-        self.blueprint = Blueprint(self.alias, __name__)
 
     def make_blueprint(self):
         if self.model is None or self.db is None:
             raise ValueError("Model or db not initiated.")
 
-        @self.blueprint.route(self.alias, methods=['GET', 'POST'])
+        blueprint = Blueprint(self.alias, __name__)
+
+        @blueprint.route(self.alias, methods=['GET', 'POST'])
         def collection_methods():
             if request.method == 'POST':
                 return self.post(request.form)
             else:
                 return self.get_all()
 
-        @self.blueprint.route(self.alias + '/<item_id>', methods=['GET', 'PUT', 'DELETE'])
+        @blueprint.route(self.alias + '/<item_id>', methods=['GET', 'PUT', 'DELETE'])
         def resource_methods(item_id):
             entry = self.model.query.get_or_404(item_id)
             if request.method == 'GET':
@@ -43,7 +44,7 @@ class Model(object):
             else:
                 return self.delete(entry)
 
-        return self.blueprint
+        return blueprint
 
     def post(self, form):
         params = {}
