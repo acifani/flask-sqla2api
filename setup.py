@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Flask-SQLA2api',
-    version='0.1',
+    version='0.2.0',
     url='https://github.com/acifani/flask-sqla2api',
     license='BSD',
     author='Alessandro Cifani',
