@@ -3,24 +3,22 @@ from .models import Model
 
 
 class SQLA2api(object):
-    def __init__(self, app=None, model=None, db=None):
-        if app is not None:
-            self.init_app(app)
+    def __init__(self, models=None, db=None):
         if db is not None:
             self.init_db(db)
-        if model is not None:
-            self.init_model(model)
+        if models is not None:
+            self.init_models(models)
 
-    def init_app(self, app):
-        self.app = app
-
-    def init_model(self, model):
-        self.model = Model(model, self.db)
+    def init_models(self, models):
+        self.models = []
+        for model in models:
+            self.models.append(Model(model, self.db))
 
     def init_db(self, db):
         self.db = db
 
-    def make_blueprint(self):
-        if self.model is None:
-            raise ValueError("Model not initiated.")
-        return self.model.make_blueprint()
+    def append_blueprints(self, app):
+        if app is None:
+            raise ValueError("Cannot append to null app.")
+        for model in self.models:
+            app.register_blueprint(model.make_blueprint(), url_prefix='/')
