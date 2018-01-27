@@ -4,6 +4,8 @@ from .models import Model
 
 class SQLA2api(object):
     def __init__(self, models=None, db=None):
+        self.db = None
+        self.models = []
         if db is not None:
             self.init_db(db)
         if models is not None:
