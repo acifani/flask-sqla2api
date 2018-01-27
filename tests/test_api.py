@@ -7,6 +7,7 @@ from flask_sqla2api import SQLA2api
 
 GOOD_ENTRY = {'id': 1, 'name': 'entry mcentryface'}
 
+
 class ApiTests(unittest.TestCase):
     def setUp(self):
         app = Flask(__name__)
@@ -18,8 +19,8 @@ class ApiTests(unittest.TestCase):
             id = self.db.Column(self.db.Integer, primary_key=True)
             name = self.db.Column(self.db.String(80))
 
-        api = SQLA2api(app, Entry, self.db)
-        app.register_blueprint(api.make_blueprint(), url_prefix='/')
+        api = SQLA2api([Entry], self.db)
+        api.append_blueprints(app)
 
         self.db.create_all()
         self.client = app.test_client()
