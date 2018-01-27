@@ -3,6 +3,8 @@ from flask import Blueprint, jsonify, request
 
 class Model(object):
     def __init__(self, model=None, db=None):
+        self.model = None
+        self.db = None
         if model is not None:
             self.init_model(model)
         if db is not None:

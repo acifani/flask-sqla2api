@@ -4,6 +4,8 @@ from .models import Model
 
 class SQLA2api(object):
     def __init__(self, models=None, db=None):
+        self.db = None
+        self.models = []
         if db is not None:
             self.init_db(db)
         if models is not None:
@@ -22,3 +24,8 @@ class SQLA2api(object):
             raise ValueError("Cannot append to null app.")
         for model in self.models:
             app.register_blueprint(model.make_blueprint(), url_prefix='/')
+
+
+def generate_blueprint(model, db):
+    model = Model(model, db)
+    return model.make_blueprint()
