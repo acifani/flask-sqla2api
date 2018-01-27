@@ -1,11 +1,11 @@
-[WIP] Flask-sqla2api
-=======================
+Flask-sqla2api
+==============
 
 Flask middleware that creates a simple Flask API CRUD REST endpoint
 based on a SQLAlchemy model definition.
 
 Basic usage
--------------
+-----------
 
 .. code-block:: python
 
@@ -23,8 +23,8 @@ Basic usage
         name = db.Column(db.String(80))
 
     # Init Flask-sqla2api and register its blueprint
-    api = SQLA2api(app, Entry, db)
-    app.register_blueprint(api.make_blueprint(), url_prefix='/')
+    api = SQLA2api([Entry], self.db)
+    api.append_blueprints(app)
 
 The previous tiny app will create the following endpoints
 
