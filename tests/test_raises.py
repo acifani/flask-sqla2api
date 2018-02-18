@@ -11,16 +11,16 @@ class RaisesTest(unittest.TestCase):
         self.api = SQLA2api()
         self.app = Flask(__name__)
 
-    def test_append_blueprints_no_app_throws(self):
+    def test__append_blueprints__no_app__throws(self):
         with self.assertRaises(ValueError):
             self.api.append_blueprints(None)
 
-    def test_generate_blueprint_no_model_throws(self):
+    def test__generate_blueprint__no_model__throws(self):
         db = SQLAlchemy(self.app)
         with self.assertRaises(ValueError):
             generate_blueprint(None, db)
 
-    def test_generate_blueprint_no_db_throws(self):
+    def test__generate_blueprint__no_db__throws(self):
         db = SQLAlchemy(self.app)
 
         class TestModel(db.Model):

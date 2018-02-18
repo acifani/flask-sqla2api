@@ -62,8 +62,7 @@ class Model(object):
         self.db.session.add(new_item)
         self.db.session.commit()
 
-        response = jsonify(params)
-        return response, 201
+        return jsonify(params), 201
 
     def get_all(self):
         all_items = self.model.query.all()
@@ -74,16 +73,14 @@ class Model(object):
                 entry[field] = getattr(item, field)
             results.append(entry)
 
-        response = jsonify(results)
-        return response, 200
+        return jsonify(results), 200
 
     def get(self, entry):
         result = {}
         for field in self.fields:
             result[field] = getattr(entry, field)
 
-        response = jsonify(result)
-        return response, 200
+        return jsonify(result), 200
 
     def put(self, data, entry):
         result = {}
@@ -93,8 +90,7 @@ class Model(object):
             result[field] = value
         self.db.session.commit()
 
-        response = jsonify(result)
-        return response, 201
+        return jsonify(result), 201
 
     def delete(self, entry):
         self.db.session.delete(entry)
@@ -105,11 +101,12 @@ class Model(object):
         if not self.fields_type:
             raise ValueError("Model not initialized")
         if value is None:
-            raise ValueError("Expected value but found None for field: %s" % field)
+            raise ValueError(
+                "Expected value but found None for field: %s" % field)
         return (self.fields_type[field])(value)
 
     def get_data(self, request):
-        if request.content_type == "multipart/form-data":
+        if "multipart/form-data" in request.content_type:
             return request.form.to_dict()
         if request.content_type == "application/json":
             return request.get_json()
