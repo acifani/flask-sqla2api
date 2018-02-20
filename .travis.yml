@@ -14,7 +14,7 @@ install:
 
 script:
   - tox
-  - coverage run -m pytest
+  - coverage run --source flask_sqla2api -m pytest
   - coverage report -m
 
 after_success:
