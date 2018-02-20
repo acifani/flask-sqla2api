@@ -7,6 +7,10 @@ Flask-SQLA2api
 .. image:: https://badge.fury.io/py/Flask-SQLA2api.svg
     :target: https://badge.fury.io/py/Flask-SQLA2api
 
+.. image:: https://coveralls.io/repos/github/acifani/flask-sqla2api/badge.svg?branch=master
+    :target: https://coveralls.io/github/acifani/flask-sqla2api?branch=master
+
+
 Flask middleware that creates a simple Flask API CRUD REST endpoint
 based on a SQLAlchemy model definition.
 
