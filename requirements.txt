@@ -1,5 +1,6 @@
 click==6.7
 colorama==0.3.9
+coveralls==1.2.0
 Flask==0.12.2
 Flask-SQLAlchemy==2.2
 itsdangerous==0.24
