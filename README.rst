@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Facifani%2Fflask-sqla2api.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Facifani%2Fflask-sqla2api?ref=badge_shield)
+
 Flask-SQLA2api
 ==============
 
@@ -78,3 +80,7 @@ To-Do
 
 - Input validation
 - API docs generation
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Facifani%2Fflask-sqla2api.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Facifani%2Fflask-sqla2api?ref=badge_large)
