@@ -9,16 +9,10 @@ python:
   - "nightly"
 
 install:
-  - pip install -r requirements.txt
   - pip install tox-travis
 
 script:
   - tox
-  - coverage run --source flask_sqla2api -m pytest
-  - coverage report -m
-
-after_success:
-  - coveralls
 
 cache:
   - pip
