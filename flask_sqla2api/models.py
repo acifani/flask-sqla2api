@@ -26,9 +26,9 @@ class Model(object):
     def make_blueprint(self):
         if self.model is None or self.db is None:
             raise ValueError("Model or db not initiated.")
-        blueprint = Blueprint(self.alias, __name__)
+        blueprint = Blueprint(self.alias, __name__, url_prefix='/')
 
-        @blueprint.route(self.alias, methods=['GET', 'POST'])
+        @blueprint.route('/' + self.alias, methods=['GET', 'POST'])
         def collection_methods():
             if request.method == 'POST':
                 data = self.get_data(request)
@@ -38,7 +38,7 @@ class Model(object):
             else:
                 return self.get_all()
 
-        @blueprint.route(self.alias + '/<item_id>', methods=['GET', 'PUT', 'DELETE'])
+        @blueprint.route('/' + self.alias + '/<item_id>', methods=['GET', 'PUT', 'DELETE'])
         def resource_methods(item_id):
             entry = self.model.query.get_or_404(item_id)
             if request.method == 'GET':

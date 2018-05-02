@@ -23,7 +23,7 @@ class SQLA2api(object):
         if app is None:
             raise ValueError("Cannot append to null app.")
         for model in self.models:
-            app.register_blueprint(model.make_blueprint(), url_prefix='/')
+            app.register_blueprint(model.make_blueprint())
 
 
 def generate_blueprint(model, db):
