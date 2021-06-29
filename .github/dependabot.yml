@@ -6,10 +6,3 @@ updates:
     interval: monthly
     time: "04:00"
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: pytest
-    versions:
-    - 6.2.1
-  - dependency-name: coveralls
-    versions:
-    - 2.2.0
